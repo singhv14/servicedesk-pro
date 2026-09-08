@@ -1,8 +1,9 @@
 package com.servicedesk.pro.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.servicedesk.pro.dto.TicketRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -12,4 +13,11 @@ public class HelloController {
     public String hello() {
         return "Hello from ServiceDesk Pro";
     }
+
+
+    @PostMapping("/tickets")
+    public ResponseEntity<TicketRequest> createTicket(@RequestBody TicketRequest ticketRequest) {
+        return new ResponseEntity<>(ticketRequest, HttpStatus.CREATED);
+    }
+
 }
