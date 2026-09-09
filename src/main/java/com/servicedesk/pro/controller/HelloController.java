@@ -15,9 +15,9 @@ public class HelloController {
     }
 
 
-    @PostMapping("/tickets")
-    public ResponseEntity<TicketRequest> createTicket(@RequestBody TicketRequest ticketRequest) {
-        return new ResponseEntity<>(ticketRequest, HttpStatus.CREATED);
-    }
+//    @PostMapping("/tickets")
+//    public ResponseEntity<TicketRequest> createTicket(@RequestBody TicketRequest ticketRequest) {
+//        return new ResponseEntity<>(ticketRequest, HttpStatus.CREATED);
+//    }
 
 }
