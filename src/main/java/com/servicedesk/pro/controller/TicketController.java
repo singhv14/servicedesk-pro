@@ -4,6 +4,7 @@ import com.servicedesk.pro.dto.TicketRequest;
 import com.servicedesk.pro.entity.Ticket;
 import com.servicedesk.pro.service.TicketService;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<Ticket> createTicket(@RequestBody TicketRequest ticketRequest) {
+    public ResponseEntity<Ticket> createTicket(@Valid @RequestBody TicketRequest ticketRequest) {
 
         Ticket createdTicket= ticketService.createTicket(ticketRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTicket);
