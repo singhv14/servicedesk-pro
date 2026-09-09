@@ -3,6 +3,7 @@ package com.servicedesk.pro.service;
 import com.servicedesk.pro.dto.TicketRequest;
 import com.servicedesk.pro.entity.Ticket;
 import com.servicedesk.pro.entity.User;
+import com.servicedesk.pro.exception.UserNotFoundException;
 import com.servicedesk.pro.repository.TicketRepository;
 import com.servicedesk.pro.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class TicketService {
     public Ticket createTicket(TicketRequest request) {
 
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Ticket ticket = new Ticket();
         

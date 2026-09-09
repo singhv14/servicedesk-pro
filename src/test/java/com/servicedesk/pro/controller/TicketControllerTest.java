@@ -2,6 +2,7 @@ package com.servicedesk.pro.controller;
 
 import com.servicedesk.pro.dto.TicketRequest;
 import com.servicedesk.pro.entity.Ticket;
+import com.servicedesk.pro.exception.UserNotFoundException;
 import com.servicedesk.pro.service.TicketService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -96,6 +98,28 @@ public class TicketControllerTest {
                             """)
                 )
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturn404WhenUserDoesNotExist() throws Exception {
+
+        given(ticketService.createTicket(any(TicketRequest.class)))
+                .willThrow(new UserNotFoundException("User not found"));
+
+        mockMvc.perform(
+                        post("/api/tickets")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                            {
+                                "title": "Laptop issue",
+                                "description": "Laptop is not starting",
+                                "userId": 999
+                            }
+                            """)
+                )
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message").value("User not found"));
     }
 
 
