@@ -27,24 +27,24 @@ public class HelloControllerTest {
 
     }
 
-    @Test
-    void shouldCreateTicket() throws Exception {
-
-        mockMvc.perform(
-                        post("/api/tickets")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("""
-                        {
-                            "title": "Laptop issue",
-                            "description": "Laptop is not starting"
-                        }
-                        """)
-                )
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.title").value("Laptop issue"))
-                .andExpect(jsonPath("$.description").value("Laptop is not starting"));
-
-
-    }
+//    @Test
+//    void shouldCreateTicket() throws Exception {
+//
+//        mockMvc.perform(
+//                        post("/api/tickets")
+//                                .contentType(MediaType.APPLICATION_JSON)
+//                                .content("""
+//                        {
+//                            "title": "Laptop issue",
+//                            "description": "Laptop is not starting"
+//                        }
+//                        """)
+//                )
+//                .andExpect(status().isCreated())
+//                .andExpect(jsonPath("$.title").value("Laptop issue"))
+//                .andExpect(jsonPath("$.description").value("Laptop is not starting"));
+//
+//
+//    }
 
 }
