@@ -36,8 +36,9 @@ public class TicketControllerTest {
 
         mockMvc.perform(post("/api/tickets").contentType(MediaType.APPLICATION_JSON).content("""
                     {
-                                                                "title": "Laptop issue",
-                                                                "description": "Laptop is not starting"
+                         "title": "Laptop issue",
+                         "description": "Laptop is not starting",
+                         "userId": 1
                     }
                 """))
                 .andExpect(status().isCreated())
@@ -45,5 +46,58 @@ public class TicketControllerTest {
                 .andExpect(jsonPath("$.description").value("Laptop is not starting"));
 
     }
+
+    @Test
+    void shouldRejectBlankTitle() throws Exception {
+
+        mockMvc.perform(
+                        post("/api/tickets")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                            {
+                                "title": "",
+                                "description": "Laptop is not starting",
+                                "userId": 1
+                            }
+                            """)
+                )
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldRejectMissingUserId() throws Exception {
+
+        mockMvc.perform(
+                        post("/api/tickets")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                            {
+                                "title": "",
+                                "description": "Laptop is not starting"
+                            }
+                            """)
+                )
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    void shouldRejectDescriptionTooLong() throws Exception {
+
+        mockMvc.perform(
+                        post("/api/tickets")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                            {
+                                "title": "",
+                                "description": "This description is intentionally made longer than one hundred characters so that validation should reject this request.",
+                                "userId": 1
+                            }
+                            """)
+                )
+                .andExpect(status().isBadRequest());
+    }
+
+
 
 }
