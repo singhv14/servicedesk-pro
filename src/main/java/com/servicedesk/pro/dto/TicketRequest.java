@@ -4,6 +4,7 @@ public class TicketRequest {
 
     private String title;
     private String description;
+    private Long userId;
 
     public String getTitle() {
         return title;
@@ -19,5 +20,13 @@ public class TicketRequest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
