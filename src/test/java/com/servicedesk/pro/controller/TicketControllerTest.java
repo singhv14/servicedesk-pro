@@ -142,8 +142,13 @@ public class TicketControllerTest {
                 4
         );
 
-        when(ticketService.getTickets(any(Pageable.class)))
-                .thenReturn(page);
+        when(ticketService.searchTickets(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(Pageable.class)
+        )).thenReturn(page);
 
         mockMvc.perform(get("/api/tickets")
                         .param("page", "0")
@@ -154,6 +159,79 @@ public class TicketControllerTest {
                 .andExpect(jsonPath("$.size").value(2))
                 .andExpect(jsonPath("$.totalElements").value(4))
                 .andExpect(jsonPath("$.totalPages").value(2));
+    }
+
+
+    @Test
+    void shouldFilterTicketsByStatus() throws Exception {
+
+        Pageable pageable = PageRequest.of(0, 2);
+
+        Page<Ticket> page = new PageImpl<>(
+                List.of(new Ticket()),
+                pageable,
+                1
+        );
+
+        when(ticketService.searchTickets(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(Pageable.class)
+        )).thenReturn(page);
+
+        mockMvc.perform(get("/api/tickets")
+                        .param("status", "OPEN")
+                        .param("page", "0")
+                        .param("size", "2"))
+                .andExpect(status().isOk());
+
+        org.mockito.Mockito.verify(ticketService).searchTickets(
+                org.mockito.ArgumentMatchers.eq("OPEN"),
+                org.mockito.ArgumentMatchers.isNull(),
+                org.mockito.ArgumentMatchers.isNull(),
+                org.mockito.ArgumentMatchers.isNull(),
+                any(Pageable.class)
+        );
+    }
+
+
+    @Test
+    void shouldFilterTicketsByMultipleCriteria() throws Exception {
+
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Page<Ticket> page = new PageImpl<>(
+                List.of(new Ticket()),
+                pageable,
+                1
+        );
+
+        when(ticketService.searchTickets(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(Pageable.class)
+        )).thenReturn(page);
+
+        mockMvc.perform(get("/api/tickets")
+                        .param("status", "OPEN")
+                        .param("priority", "HIGH")
+                        .param("category", "HARDWARE")
+                        .param("keyword", "laptop")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk());
+
+        org.mockito.Mockito.verify(ticketService).searchTickets(
+                org.mockito.ArgumentMatchers.eq("OPEN"),
+                org.mockito.ArgumentMatchers.eq("HIGH"),
+                org.mockito.ArgumentMatchers.eq("HARDWARE"),
+                org.mockito.ArgumentMatchers.eq("laptop"),
+                any(Pageable.class)
+        );
     }
 
 
