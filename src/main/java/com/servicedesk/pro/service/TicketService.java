@@ -32,13 +32,28 @@ public class TicketService {
         ticket.setTitle(request.getTitle());
         ticket.setDescription(request.getDescription());
         ticket.setUser(user);
+        ticket.setStatus(request.getStatus());
+        ticket.setPriority(request.getPriority());
+        ticket.setCategory(request.getCategory());
 
         return ticketRepository.save(ticket);
 
     }
 
-    public Page<Ticket> getTickets(Pageable pageable) {
-        return ticketRepository.findAll(pageable);
+    public Page<Ticket> searchTickets(
+            String status,
+            String priority,
+            String category,
+            String keyword,
+            Pageable pageable) {
+
+        return ticketRepository.searchTickets(
+                status == null ? "" : status,
+                priority == null ? "" : priority,
+                category == null ? "" : category,
+                keyword == null ? "" : keyword,
+                pageable
+        );
     }
 
 }
