@@ -6,6 +6,8 @@ import com.servicedesk.pro.entity.User;
 import com.servicedesk.pro.exception.UserNotFoundException;
 import com.servicedesk.pro.repository.TicketRepository;
 import com.servicedesk.pro.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,6 +35,10 @@ public class TicketService {
 
         return ticketRepository.save(ticket);
 
+    }
+
+    public Page<Ticket> getTickets(Pageable pageable) {
+        return ticketRepository.findAll(pageable);
     }
 
 }
