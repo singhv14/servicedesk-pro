@@ -17,3 +17,6 @@ spring:
 #    org:
 #      springframework:
 #        security: debug
+
+jwt:
+  secret: ${JWT_SECRET}

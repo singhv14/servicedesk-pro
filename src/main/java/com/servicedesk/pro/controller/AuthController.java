@@ -1,9 +1,11 @@
 package com.servicedesk.pro.controller;
 
 import com.servicedesk.pro.dto.LoginRequest;
+import com.servicedesk.pro.dto.LoginResponse;
 import com.servicedesk.pro.dto.RegisterRequest;
 import com.servicedesk.pro.dto.UserResponse;
 import com.servicedesk.pro.entity.User;
+import com.servicedesk.pro.security.JwtService;
 import com.servicedesk.pro.service.RegistrationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -25,10 +27,13 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
 
-    public AuthController(RegistrationService registrationService, AuthenticationManager authenticationManager) {
+    private final JwtService jwtService;
+
+    public AuthController(RegistrationService registrationService, AuthenticationManager authenticationManager, JwtService jwtService) {
 
         this.registrationService = registrationService;
         this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
 
     }
 
@@ -41,8 +46,10 @@ public class AuthController {
                         request.getPassword()
                 )
         );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return ResponseEntity.ok().build();
+        String accessToken = jwtService.generateToken(authentication.getName());
+        return ResponseEntity.ok(
+                new LoginResponse(accessToken, "Bearer")
+        );
     }
 
     @PostMapping("/register")
